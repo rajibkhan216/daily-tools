@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartTools - Free Everyday Calculators</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px 15px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    header h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    header p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      max-width: 500px;
+      width: 100%;
+      margin-bottom: 20px;
+      padding-bottom: 5px;
+    }
+    .tab-btn {
+      flex: 1;
+      min-width: 90px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+    .tool-panel {
+      display: none;
+    }
+    .tool-panel.active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+    button.calc-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button.calc-btn:hover {
+      background: var(--primary-hover);
+    }
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      display: none;
+    }
+    .result-box h4 {
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+    .result-box p {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+    /* AD SPACE PLACEHOLDER */
+    .ad-banner {
+      width: 100%;
+      max-width: 500px;
+      margin-top: 25px;
+      padding: 15px;
+      background: #f1f5f9;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>SmartTools Hub</h1>
+    <p>Simple, instant, and free everyday online tools</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">Age</button>
+    <button class="tab-btn" onclick="switchTab(1)">Loan/EMI</button>
+    <button class="tab-btn" onclick="switchTab(2)">Discount</button>
+    <button class="tab-btn" onclick="switchTab(3)">Words</button>
+  </div>
+
+  <div class="card">
+    <!-- TOOL 1: AGE CALCULATOR -->
+    <div class="tool-panel active" id="tool-0">
+      <div class="form-group">
+        <label>Select Date of Birth:</label>
+        <input type="date" id="dobInput">
+      </div>
+      <button class="calc-btn" onclick="calcAge()">Calculate Exact Age</button>
+      <div class="result-box" id="ageResult">
+        <h4>Your Age:</h4>
+        <p id="ageText"></p>
+      </div>
+    </div>
+
+    <!-- TOOL 2: LOAN / EMI CALCULATOR -->
+    <div class="tool-panel" id="tool-1">
+      <div class="form-group">
+        <label>Loan Amount ($ or Tk):</label>
+        <input type="number" id="loanAmount" placeholder="e.g. 10000">
+      </div>
+      <div class="form-group">
+        <label>Annual Interest Rate (%):</label>
+        <input type="number" id="interestRate" placeholder="e.g. 8">
+      </div>
+      <div class="form-group">
+        <label>Period (Months):</label>
+        <input type="number" id="loanMonths" placeholder="e.g. 12">
+      </div>
+      <button class="calc-btn" onclick="calcEMI()">Calculate Monthly Payment</button>
+      <div class="result-box" id="emiResult">
+        <h4>Monthly Payment:</h4>
+        <p id="emiText"></p>
+      </div>
+    </div>
+
+    <!-- TOOL 3: DISCOUNT CALCULATOR -->
+    <div class="tool-panel" id="tool-2">
+      <div class="form-group">
+        <label>Original Price:</label>
+        <input type="number" id="origPrice" placeholder="e.g. 100">
+      </div>
+      <div class="form-group">
+        <label>Discount Percentage (%):</label>
+        <input type="number" id="discPercent" placeholder="e.g. 20">
+      </div>
+      <button class="calc-btn" onclick="calcDiscount()">Calculate Final Price</button>
+      <div class="result-box" id="discResult">
+        <h4>Final Price:</h4>
+        <p id="discText"></p>
+      </div>
+    </div>
+
+    <!-- TOOL 4: WORD COUNTER -->
+    <div class="tool-panel" id="tool-3">
+      <div class="form-group">
+        <label>Type or paste your text below:</label>
+        <textarea id="counterText" rows="6" placeholder="Start typing here..." oninput="countWords()"></textarea>
+      </div>
+      <div class="result-box" id="wordResult" style="display:block;">
+        <p>Words: <span id="wordCount">0</span> | Characters: <span id="charCount">0</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ads will go here when you connect monetization -->
+  <div class="ad-banner">
+    <p>Ad Space (Monetization Area)</p>
+  </div>
+
+  <script>
+    function switchTab(index) {
+      document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+      });
+      document.querySelectorAll('.tool-panel').forEach((panel, i) => {
+        panel.classList.toggle('active', i === index);
+      });
+    }
+
+    function calcAge() {
+      const dobVal = document.getElementById('dobInput').value;
+      if (!dobVal) return alert('Please select a date');
+      const dob = new Date(dobVal);
+      const today = new Date();
+      let years = today.getFullYear() - dob.getFullYear();
+      let m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        years--;
+      }
+      document.getElementById('ageText').innerText = years + " Years Old";
+      document.getElementById('ageResult').style.display = 'block';
+    }
+
+    function calcEMI() {
+      const p = parseFloat(document.getElementById('loanAmount').value);
+      const r = parseFloat(document.getElementById('interestRate').value) / 12 / 100;
+      const n = parseFloat(document.getElementById('loanMonths').value);
+      if (!p || !r || !n) return alert('Please fill in all loan fields');
+      const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      document.getElementById('emiText').innerText = emi.toFixed(2) + " / month";
+      document.getElementById('emiResult').style.display = 'block';
+    }
+
+    function calcDiscount() {
+      const price = parseFloat(document.getElementById('origPrice').value);
+      const disc = parseFloat(document.getElementById('discPercent').value);
+      if (isNaN(price) || isNaN(disc)) return alert('Please enter both price and discount');
+      const saved = (price * disc) / 100;
+      const finalPrice = price - saved;
+      document.getElementById('discText').innerText = finalPrice.toFixed(2) + " (You save: " + saved.toFixed(2) + ")";
+      document.getElementById('discResult').style.display = 'block';
+    }
+
+    function countWords() {
+      const text = document.getElementById('counterText').value.trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      const chars = text.length;
+      document.getElementById('wordCount').innerText = words;
+      document.getElementById('charCount').innerText = chars;
+    }
+  </script>
+</body>
+</html>
